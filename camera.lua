@@ -141,17 +141,9 @@ function camera:attach(x,y,w,h, noclip)
 	love.graphics.translate(-self.x, -self.y)
 end
 
-function camera:lock(x, y, w, h, noclip)
-	camera:attach(x, y, w, h, noclip)
-end
-
 function camera:detach()
 	love.graphics.pop()
 	love.graphics.setScissor(self._sx,self._sy,self._sw,self._sh)
-end
-
-function camera:unlock()
-	camera:detach()
 end
 
 function camera:draw(...)
