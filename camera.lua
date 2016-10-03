@@ -33,6 +33,24 @@ camera.__index = camera
 -- Movement interpolators (for camera locking/windowing)
 camera.smooth = {}
 
+function math.clamp(x, min, max)
+  return x < min and min or (x > max and max or x)
+end
+
+function camera:getBounds()
+    return unpack(self._bounds)
+end
+
+function camera:setBounds(x1, y1, x2, y2)
+    self._bounds = {x1 = x1, y1 = y1, x2 = x2, y2 = y2}
+end
+
+function camera:setWorldBounds(x1, y1, x2, y2)
+	local w = love.graphics.getWidth()
+  	local h = love.graphics.getHeight()
+	camera:setBounds(x1 + w/2, y1 + h/2, x2 - w/2, y2 - h/2)
+end
+
 function camera.smooth.none()
 	return function(dx,dy) return dx,dy end
 end
@@ -75,6 +93,10 @@ end
 
 function camera:move(dx,dy)
 	self.x, self.y = self.x + dx, self.y + dy
+	if self._bounds then
+        	self.x = math.clamp(self.x, self._bounds.x1, self._bounds.x2)
+        	self.y = math.clamp(self.y, self._bounds.y1, self._bounds.y2)
+    	end
 	return self
 end
 
@@ -119,9 +141,17 @@ function camera:attach(x,y,w,h, noclip)
 	love.graphics.translate(-self.x, -self.y)
 end
 
+function camera:lock(x, y, w, h, noclip)
+	camera:attach(x, y, w, h, noclip)
+end
+
 function camera:detach()
 	love.graphics.pop()
 	love.graphics.setScissor(self._sx,self._sy,self._sw,self._sh)
+end
+
+function camera:unlock()
+	camera:detach()
 end
 
 function camera:draw(...)
@@ -175,12 +205,18 @@ end
 function camera:lockX(x, smoother, ...)
 	local dx, dy = (smoother or self.smoother)(x - self.x, self.y, ...)
 	self.x = self.x + dx
+	if self._bounds then
+		self.x = math.clamp(self.x, self._bounds.x1, self._bounds.x2)
+	end
 	return self
 end
 
 function camera:lockY(y, smoother, ...)
 	local dx, dy = (smoother or self.smoother)(self.x, y - self.y, ...)
 	self.y = self.y + dy
+	if self._bounds then
+        	self.y = math.clamp(self.y, self._bounds.y1, self._bounds.y2)
+    	end
 	return self
 end
 
