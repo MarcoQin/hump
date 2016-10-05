@@ -48,6 +48,8 @@ end
 function camera:setWorldBounds(x1, y1, x2, y2)
 	local w = love.graphics.getWidth()
   	local h = love.graphics.getHeight()
+	x2 = x2 > w and x2 or w
+	y2 = y2 > h and y2 or h
 	camera:setBounds(x1 + w/2, y1 + h/2, x2 - w/2, y2 - h/2)
 end
 
