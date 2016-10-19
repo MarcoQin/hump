@@ -37,6 +37,7 @@ function math.clamp(x, min, max)
   return x < min and min or (x > max and max or x)
 end
 
+-- return camera view bounds
 function camera:getBounds()
     return unpack(self._bounds)
 end
