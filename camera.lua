@@ -80,7 +80,15 @@ function camera.smooth.damped(stiffness)
 	assert(type(stiffness) == "number", "Invalid parameter: stiffness = "..tostring(stiffness))
 	return function(dx,dy, s)
 		local dts = love.timer.getDelta() * (s or stiffness)
-		return dx*dts, dy*dts
+        local ddx = dx * dts
+        local ddy = dy * dts
+        if math.abs(ddx) < 1.3 then
+            ddx = 0
+        end
+        if math.abs(ddy) < 1.3 then
+            ddy = 0
+        end
+		return ddx, ddy
 	end
 end
 
