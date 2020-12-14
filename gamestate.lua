@@ -33,6 +33,7 @@ local stack = {state_init}
 local initialized_states = setmetatable({}, {__mode = "k"})
 local state_is_dirty = true
 
+---@class Gamestate
 local GS = {}
 function GS.new(t) return t or {} end -- constructor - deprecated!
 
