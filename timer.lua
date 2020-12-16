@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]--
 
+---@class Timer
 local Timer = {}
 Timer.__index = Timer
 
@@ -40,7 +41,6 @@ function Timer:update(dt)
 		--   limit = <number>,
 		--   count = <number>,
 		-- }
-
 		handle.time = handle.time + dt
 		handle.during(dt, math.max(handle.limit - handle.time, 0))
 
